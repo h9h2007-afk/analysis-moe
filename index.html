@@ -3,31 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تقارير مدرسة زيد بن ثابت | 2026</title>
+    <title>منصة تقارير مدرسة زيد بن ثابت | وزارة التعليم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f4f7f6; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
         .moe-green { background-color: #1E5B3C; }
         .moe-gold { color: #C5A059; }
         
-        /* ضبط الطباعة الفاخرة لضمان احتواء التقرير والشعار */
         @media print {
             @page { size: A4 portrait; margin: 0; }
             .no-print { display: none !important; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             main { padding: 0 !important; width: 100% !important; margin: 0 !important; }
-            .print-container { 
-                width: 210mm; min-height: 297mm;
-                padding: 10mm 15mm !important; margin: 0 auto;
-                border: none !important; box-shadow: none !important;
-            }
+            .print-container { width: 210mm; min-height: 297mm; padding: 12mm 18mm !important; margin: 0 auto; border: none !important; box-shadow: none !important; }
             img, canvas { display: block !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .card { break-inside: avoid; border: 1px solid #eee !important; }
-            .print-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
+            .card { break-inside: avoid; border: 1px solid #ddd !important; }
         }
     </style>
 </head>
@@ -38,30 +31,28 @@
         <aside class="no-print lg:w-85 moe-green text-white p-6 shadow-2xl flex flex-col space-y-4">
             <div class="text-center pb-6 border-b border-white/10">
                 <h1 class="text-xl font-black italic text-amber-400">مدرسة زيد بن ثابت</h1>
-                <p class="text-[10px] moe-gold font-bold uppercase tracking-widest opacity-80">نظام تحليل نتائج الكيمياء</p>
+                <p class="text-[10px] moe-gold font-bold uppercase tracking-widest opacity-80 italic">Chemistry Analysis V18</p>
             </div>
 
             <div class="space-y-4 overflow-y-auto pr-1">
                 <div>
-                    <label class="block text-[10px] font-bold text-emerald-400 mb-1 uppercase tracking-wider">الإعدادات</label>
+                    <label class="block text-[10px] font-bold text-emerald-400 mb-1 uppercase tracking-wider">البيانات الإدارية</label>
                     <input type="text" id="schoolName" value="مدرسة زيد بن ثابت الثانوية" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2 focus:ring-2 focus:ring-amber-500 shadow-inner">
-                    <input type="text" id="subjectName" value="كيمياء" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2">
-                    <input type="text" id="teacherName" value="حسن آل هاشم" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2">
-                    <input type="text" id="principalName" placeholder="اسم مدير المدرسة" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none">
+                    <input type="text" id="subjectName" value="كيمياء" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2 font-bold text-amber-200">
+                    <input type="text" id="teacherName" value="حسن آل هاشم" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none">
                 </div>
 
-                <div class="bg-black/30 p-5 rounded-3xl border border-white/10 shadow-lg text-center">
-                    <label class="block text-xs font-bold text-emerald-400 mb-2 italic">المجموع الكلي للدرجة</label>
+                <div class="bg-black/30 p-5 rounded-3xl border border-white/10 shadow-inner text-center">
+                    <label class="block text-xs font-bold text-emerald-400 mb-2 italic">الدرجة الكبرى (40 أو 100)</label>
                     <input type="number" id="maxGrade" value="40" class="w-full bg-transparent text-white font-black text-4xl outline-none text-center" oninput="processAndAnalyze()">
-                    <p class="text-[9px] text-white/50 mt-2 italic">* سيقوم النظام بإعادة الحساب تلقائياً فور التغيير</p>
                 </div>
 
                 <div class="pt-6 space-y-3">
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
-                    <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl cursor-pointer block text-center shadow-lg transition">📂 اختيار ملف الإكسل</label>
-                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-bold py-4 rounded-2xl shadow-xl transition active:scale-95">🔄 دمج وتحليل الدرجات</button>
-                    <button onclick="window.print()" class="w-full border-2 border-white/30 text-white font-bold py-4 rounded-2xl hover:bg-white/10 transition">🖨️ طباعة التقرير (A4)</button>
-                    <button onclick="sendWhatsAppSummary()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">📱 ملخص واتساب</button>
+                    <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl cursor-pointer block text-center shadow-lg transition">📂 رفع ملف الإكسل</label>
+                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-bold py-4 rounded-2xl shadow-xl transition active:scale-95 uppercase">🔄 تحليل العمود الأخير</button>
+                    <button onclick="window.print()" class="w-full border-2 border-white/30 text-white font-bold py-4 rounded-2xl hover:bg-white/10 transition">🖨️ طباعة التقرير الرسمي</button>
+                    <button onclick="sendWhatsAppSummary()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2 transition">📱 ملخص واتساب</button>
                 </div>
             </div>
         </aside>
@@ -72,12 +63,12 @@
                 <div class="hidden print:flex justify-between items-center border-b-4 border-emerald-900 pb-10 mb-10">
                     <div class="text-right w-1/3">
                         <p class="font-black text-2xl text-emerald-900 leading-tight" id="p_school"></p>
-                        <p class="font-bold text-sm mt-1 underline decoration-amber-500 underline-offset-4">المادة: <span id="p_subject"></span></p>
+                        <p class="font-bold text-sm mt-1 decoration-amber-500 underline underline-offset-4">المادة: <span id="p_subject"></span></p>
                         <p class="text-xs mt-1 italic">المعلم: <span id="p_teacher"></span></p>
                     </div>
                     <div class="text-center w-1/3">
                         <img src="https://upload.wikimedia.org/wikipedia/ar/0/03/Logo_of_the_Ministry_of_Education_%28Saudi_Arabia%29.svg" class="h-24 mx-auto mb-2" alt="وزارة التعليم">
-                        <p class="font-black text-[10px] uppercase tracking-widest text-emerald-900">المملكة العربية السعودية</p>
+                        <p class="font-black text-[10px] uppercase tracking-widest text-emerald-900 leading-none">المملكة العربية السعودية</p>
                     </div>
                     <div class="text-left w-1/3 text-[11px] space-y-1">
                         <p>تاريخ التقرير: 27 يناير 2026</p>
@@ -86,34 +77,34 @@
                     </div>
                 </div>
 
-                <div class="no-print mb-8 relative">
-                    <label class="block text-sm font-bold text-slate-600 mb-2 italic">🔎 البحث الفوري عن مجموع درجات طالب:</label>
-                    <input type="text" id="studentSearch" oninput="searchStudent()" placeholder="اكتب الاسم هنا..." class="w-full p-4 rounded-2xl border-2 border-emerald-100 focus:border-emerald-500 outline-none transition shadow-sm bg-emerald-50/20 font-bold">
-                    <div id="searchResults" class="absolute z-50 w-full mt-2 bg-white rounded-2xl shadow-2xl border hidden max-h-60 overflow-y-auto"></div>
-                </div>
-
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10 print-grid" id="statsRow">
-                    <div class="card p-6 rounded-3xl border-r-8 border-emerald-900 bg-emerald-50/40 shadow-sm">
-                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">إجمالي الطلاب</p>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10" id="statsRow">
+                    <div class="card p-6 rounded-3xl border-r-8 border-emerald-900 bg-emerald-50/50 shadow-sm">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1">إجمالي الطلاب</p>
                         <h3 id="totalStudents" class="text-4xl font-black text-emerald-950">0</h3>
                     </div>
-                    <div class="card p-6 rounded-3xl border-r-8 border-amber-500 bg-amber-50/40 shadow-sm">
-                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">متوسط المجموع</p>
+                    <div class="card p-6 rounded-3xl border-r-8 border-amber-500 bg-amber-50/50 shadow-sm">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1">متوسط المجموع</p>
                         <h3 id="avgScore" class="text-4xl font-black text-amber-900">0</h3>
                     </div>
-                    <div class="card p-6 rounded-3xl border-r-8 border-blue-600 bg-blue-50/40 shadow-sm">
-                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">نسبة النجاح</p>
+                    <div class="card p-6 rounded-3xl border-r-8 border-blue-600 bg-blue-50/50 shadow-sm">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1">نسبة النجاح</p>
                         <h3 id="passRate" class="text-4xl font-black text-blue-950">0%</h3>
                     </div>
-                    <div class="card p-6 rounded-3xl border-r-8 border-rose-600 bg-rose-50/40 shadow-sm">
-                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">أعلى مجموع</p>
+                    <div class="card p-6 rounded-3xl border-r-8 border-rose-600 bg-rose-50/50 shadow-sm">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase mb-1">أعلى مجموع</p>
                         <h3 id="maxScore" class="text-4xl font-black text-rose-950">0</h3>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                    <div class="card p-8 rounded-[2.5rem] border border-slate-100 h-[380px] shadow-sm"><canvas id="gradeChart"></canvas></div>
-                    <div class="card p-8 rounded-[2.5rem] border border-slate-100 h-[380px] shadow-sm"><canvas id="qualityChart"></canvas></div>
+                    <div class="card p-8 rounded-[2.5rem] border border-slate-100 h-[380px] shadow-sm">
+                        <h4 class="text-xs font-black text-slate-500 mb-6 flex items-center gap-2 border-r-4 border-emerald-900 pr-3 uppercase">توزيع التقديرات العلمية</h4>
+                        <canvas id="gradeChart"></canvas>
+                    </div>
+                    <div class="card p-8 rounded-[2.5rem] border border-slate-100 h-[380px] shadow-sm">
+                        <h4 class="text-xs font-black text-slate-500 mb-6 flex items-center gap-2 border-r-4 border-blue-600 pr-3 uppercase">منحنى جودة الأداء</h4>
+                        <canvas id="qualityChart"></canvas>
+                    </div>
                 </div>
 
                 <div class="card rounded-[2.5rem] border border-slate-100 overflow-hidden mb-10 shadow-sm">
@@ -126,14 +117,14 @@
                             </tr>
                         </thead>
                         <tbody id="resultTable" class="divide-y divide-slate-100 text-center italic text-slate-300 font-bold">
-                            <tr><td colspan="3" class="p-10 text-lg">ارفع الملف واعتمد المجموع لبدء التحليل...</td></tr>
+                            <tr><td colspan="3" class="p-10 text-lg">بانتظار البيانات...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="hidden print:grid grid-cols-3 gap-12 mt-16 pt-12 border-t-2 border-emerald-900 text-center text-xs font-black italic uppercase tracking-tighter">
                     <div class="space-y-16">توقيع المعلم المعتمد<br><span id="s_teacher" class="text-slate-900 font-bold border-b-2 border-slate-200 inline-block min-w-[120px]"></span></div>
-                    <div class="space-y-6">ختم المدرسة الرسمي<div class="w-24 h-24 border-2 border-dashed border-emerald-200 rounded-full mx-auto flex items-center justify-center text-[8px] text-slate-300 italic uppercase">الختم هنا</div></div>
+                    <div class="space-y-6">ختم المدرسة الرسمي<div class="w-24 h-24 border-2 border-dashed border-emerald-200 rounded-full mx-auto flex items-center justify-center text-[8px] text-slate-300 italic uppercase tracking-widest leading-none">الختم الرسمي</div></div>
                     <div class="space-y-16">توقيع مدير المدرسة<br><span id="s_principal_print" class="text-slate-900 font-bold border-b-2 border-slate-200 inline-block min-w-[120px]"></span></div>
                 </div>
             </div>
@@ -149,7 +140,7 @@
             const config = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
             gradeChart = new Chart(document.getElementById('gradeChart'), {
                 type: 'bar',
-                data: { labels: ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'], datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#1E5B3C', '#22c55e', '#f59e0b', '#3b82f6', '#ef4444'], borderRadius: 12 }] },
+                data: { labels: ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'], datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#064e3b', '#059669', '#d97706', '#2563eb', '#dc2626'], borderRadius: 12 }] },
                 options: config
             });
             qualityChart = new Chart(document.getElementById('qualityChart'), {
@@ -163,7 +154,7 @@
             const reader = new FileReader();
             reader.onload = (evt) => { 
                 workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                alert("✅ تم استلام الملف! جاري البحث عن عمود 'المجموع'...");
+                alert("✅ تم استلام الملف! جاري تحليل المجموع النهائي...");
             };
             reader.readAsBinaryString(e.target.files[0]);
         });
@@ -172,17 +163,17 @@
             if (!workbook) return alert("الرجاء اختيار ملف إكسل أولاً");
             const maxGradeLimit = parseFloat(document.getElementById('maxGrade').value) || 100;
             allStudents = [];
-            let counts = [0, 0, 0, 0, 0]; let successCount = 0;
+            let counts = [0, 0, 0, 0, 0]; let success = 0;
 
             workbook.SheetNames.forEach(name => {
                 const sheet = workbook.Sheets[name];
                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                 if (rows.length === 0) return;
 
-                // البحث الديناميكي عن فهرس عمود "المجموع"
                 const headerRow = rows[0];
-                let scoreIndex = headerRow.findIndex(cell => cell && cell.toString().trim() === "المجموع");
-                if (scoreIndex === -1) scoreIndex = 1; // الافتراضي إذا لم يجد الاسم
+                // محاولة إيجاد "المجموع"، وإذا لم يجد، يأخذ العمود الأخير تلقائياً
+                let scoreIndex = headerRow.findIndex(cell => cell && cell.toString().trim().includes("المجموع"));
+                if (scoreIndex === -1) scoreIndex = headerRow.length - 1;
 
                 rows.forEach((row, i) => {
                     if (i === 0) return;
@@ -195,18 +186,16 @@
                         else if (p >= 70) { counts[2]++; g="جيد"; }
                         else if (p >= 50) { counts[3]++; g="مقبول"; }
                         else counts[4]++;
-                        if (s >= (maxGradeLimit * 0.5)) successCount++;
+                        if (s >= (maxGradeLimit * 0.5)) success++;
                         allStudents.push({ name: row[0], score: s, percent: p.toFixed(1), grade: g });
                     }
                 });
             });
 
-            if (allStudents.length === 0) return alert("لم يتم العثور على درجات صالحة في العمود المختار.");
-
             const total = allStudents.length;
             const avg = (allStudents.reduce((a, b) => a + b.score, 0) / total).toFixed(1);
             const highest = Math.max(...allStudents.map(st => st.score));
-            stats = { total, avg, pass: ((successCount/total)*100).toFixed(0), max: highest };
+            stats = { total, avg, pass: ((success/total)*100).toFixed(0), max: highest };
 
             document.getElementById('totalStudents').innerText = total;
             document.getElementById('avgScore').innerText = avg;
@@ -221,38 +210,16 @@
             document.getElementById('p_teacher').innerText = document.getElementById('teacherName').value;
             document.getElementById('p_max').innerText = maxGradeLimit;
             document.getElementById('s_teacher').innerText = document.getElementById('teacherName').value;
-            document.getElementById('p_principal').innerText = document.getElementById('principalName').value || "...";
-            document.getElementById('s_principal_print').innerText = document.getElementById('principalName').value || "...";
 
-            const tableLabels = ['ممتاز (90%+)', 'جيد جداً (80%+)', 'جيد (70%+)', 'مقبول (50%+)', 'لم يجتز (<50%)'];
+            const labels = ['ممتاز (90%+)', 'جيد جداً (80%+)', 'جيد (70%+)', 'مقبول (50%+)', 'لم يجتز (<50%)'];
             document.getElementById('resultTable').innerHTML = counts.map((c, i) => `
-                <tr class="hover:bg-slate-50 transition font-bold"><td class="p-4 px-8 text-slate-700 text-right">${tableLabels[i]}</td><td class="p-4 font-black text-emerald-800 text-lg">${c} طالباً</td><td class="p-4 font-mono text-slate-400 font-black">${((c/total)*100).toFixed(1)}%</td></tr>
+                <tr class="hover:bg-slate-50 transition font-bold"><td class="p-4 px-8 text-slate-700 text-right">${labels[i]}</td><td class="p-4 font-black text-emerald-800 text-lg">${c}</td><td class="p-4 font-mono text-slate-400 font-black">${((c/total)*100).toFixed(1)}%</td></tr>
             `).join('');
-        }
-
-        function searchStudent() {
-            const query = document.getElementById('studentSearch').value.toLowerCase();
-            const resultsDiv = document.getElementById('searchResults');
-            if (!query) { resultsDiv.classList.add('hidden'); return; }
-            const filtered = allStudents.filter(st => st.name && st.name.toLowerCase().includes(query));
-            resultsDiv.innerHTML = filtered.map(st => `
-                <div class="p-4 border-b hover:bg-emerald-50 cursor-pointer flex justify-between items-center transition" onclick="sendIndividualWA('${st.name}', '${st.score}', '${st.grade}')">
-                    <div class="text-right"><span class="font-bold text-slate-800 block">${st.name}</span><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">المجموع: ${st.score} | التقدير: ${st.grade}</span></div>
-                    <button class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full font-black shadow-md uppercase tracking-tighter">إرسال واتساب 📱</button>
-                </div>
-            `).join('');
-            resultsDiv.classList.remove('hidden');
-        }
-
-        function sendIndividualWA(name, score, grade) {
-            const maxG = document.getElementById('maxGrade').value;
-            const msg = `*نتيجة الطالب الفردية*\n*الاسم:* ${name}\n*المادة:* ${document.getElementById('subjectName').value}\n*المجموع:* ${score} من ${maxG}\n*التقدير:* ${grade}\n_مدرسة زيد بن ثابت الثانوية_`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function sendWhatsAppSummary() {
             if (stats.total === 0) return alert("الرجاء تحليل البيانات أولاً.");
-            const msg = `*ملخص تقرير مدرسة زيد بن ثابت*\n*المادة:* ${document.getElementById('subjectName').value}\n*الطلاب:* ${stats.total}\n*المتوسط:* ${stats.avg}\n*النجاح:* ${stats.pass}%\n*أعلى مجموع:* ${stats.max}`;
+            const msg = `*تقرير مدرسة زيد بن ثابت*\n*المادة:* ${document.getElementById('subjectName').value}\n*الطلاب:* ${stats.total}\n*المتوسط:* ${stats.avg}\n*النجاح:* ${stats.pass}%\n*أعلى مجموع:* ${stats.max}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
