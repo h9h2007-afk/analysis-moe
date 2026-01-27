@@ -3,85 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحليل نتائج الكيمياء | مدرسة زيد بن ثابت</title>
+    <title>نظام تحليل الدرجات | وزارة التعليم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f0f2f5; }
-        .moe-green { background-color: #1E5B3C; }
-        .moe-light { background-color: #72B132; }
-        .card-hover:hover { transform: translateY(-5px); transition: 0.3s; cursor: pointer; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        .bg-moe-green { background-color: #1E5B3C; }
+        .bg-moe-light { background-color: #72B132; }
+        .text-moe-gold { color: #C5A059; }
+        .stat-card { transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-5px); shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
 <body>
+
     <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="w-full md:w-64 moe-green text-white p-6 shadow-xl">
-            <h1 class="text-xl font-bold mb-10 text-center border-b pb-4">مدرسة زيد بن ثابت<br><span class="text-moe-light text-sm">قسم الإرشاد الطلابي</span></h1>
-            <nav class="space-y-4">
-                <button onclick="changeView('main')" class="w-full text-right py-2 px-4 rounded hover:bg-white/10 transition">🏠 الرئيسية</button>
-                <button onclick="changeView('chem')" class="w-full text-right py-2 px-4 rounded bg-moe-light text-white font-bold shadow-md">🧪 نتائج الكيمياء</button>
-                <button onclick="window.print()" class="w-full text-right py-2 px-4 rounded hover:bg-white/10 transition">🖨️ طباعة التقرير</button>
-            </nav>
+        <aside class="w-full md:w-72 bg-moe-green text-white p-6 shadow-2xl">
+            <div class="mb-10 text-center">
+                <div class="text-2xl font-bold">وزارة <span class="text-moe-light">التعليم</span></div>
+                <div class="text-xs text-moe-gold mt-1">منصة تحليل نتائج الاختبارات</div>
+            </div>
+            
+            <div class="mt-10 p-4 bg-white/10 rounded-xl border border-white/20">
+                <label class="block text-sm font-semibold mb-3 text-moe-light">استيراد درجات الطلاب (Excel)</label>
+                <input type="file" id="excelInput" accept=".xlsx, .xls" class="block w-full text-xs text-gray-300
+                    file:mr-0 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-xs file:font-semibold
+                    file:bg-moe-light file:text-white
+                    hover:file:bg-green-600 cursor-pointer">
+                <p class="text-[10px] mt-2 text-gray-400">* تأكد أن العمود الأول يحتوي على الأسماء والثاني على الدرجات (من 40).</p>
+            </div>
         </aside>
 
-        <main class="flex-1 p-8">
-            <header class="mb-8">
-                <h2 id="title" class="text-3xl font-bold text-slate-800">تحليل أداء طلاب الكيمياء</h2>
-                <p class="text-gray-500">مرحباً أ/ حسن، البيانات محدثة بناءً على آخر اختبار</p>
+        <main class="flex-1 p-6 md:p-10">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b pb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">لوحة تحليل الاختبار النهائي (40 درجة)</h2>
+                    <p id="fileNameDisplay" class="text-gray-500 text-sm">بانتظار رفع ملف البيانات...</p>
+                </div>
+                <button onclick="window.print()" class="bg-moe-gold text-white px-6 py-2 rounded-lg hover:bg-yellow-700 shadow-lg transition flex items-center gap-2">
+                    <span>🖨️</span> طباعة التقرير النهائي
+                </button>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-r-8 border-moe-green">
-                    <p class="text-gray-400 text-sm">عدد المختبرين</p>
-                    <h3 id="stat1" class="text-3xl font-bold">145 طالباً</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-r-4 border-moe-green">
+                    <p class="text-gray-400 text-xs font-bold mb-1">عدد الطلاب</p>
+                    <h3 id="totalStudents" class="text-3xl font-bold text-gray-800">0</h3>
                 </div>
-                <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-r-8 border-moe-light">
-                    <p class="text-gray-400 text-sm">نسبة النجاح</p>
-                    <h3 id="stat2" class="text-3xl font-bold">92%</h3>
+                <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-r-4 border-moe-light">
+                    <p class="text-gray-400 text-xs font-bold mb-1">متوسط الدرجات</p>
+                    <h3 id="avgScore" class="text-3xl font-bold text-gray-800">0</h3>
                 </div>
-                <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-r-8 border-yellow-500">
-                    <p class="text-gray-400 text-sm">المتوسط الحسابي</p>
-                    <h3 id="stat3" class="text-3xl font-bold">85.5</h3>
+                <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-500">
+                    <p class="text-gray-400 text-xs font-bold mb-1">نسبة النجاح</p>
+                    <h3 id="passRate" class="text-3xl font-bold text-gray-800">0%</h3>
+                </div>
+                <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-r-4 border-moe-gold">
+                    <p class="text-gray-400 text-xs font-bold mb-1">أعلى درجة</p>
+                    <h3 id="maxScore" class="text-3xl font-bold text-gray-800">0</h3>
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-2xl shadow-lg border">
-                <h4 class="mb-6 font-bold text-lg text-slate-700">مستوى الطلاب الأسبوعي</h4>
-                <canvas id="mainChart" style="max-height: 400px;"></canvas>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <h4 class="mb-6 font-bold text-gray-700 flex items-center gap-2">توزيع المستويات (من 40)</h4>
+                    <canvas id="gradeChart"></canvas>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <h4 class="mb-6 font-bold text-gray-700">مقارنة النجاح والرسوب</h4>
+                    <canvas id="passPieChart"></canvas>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        let myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
-                datasets: [{
-                    label: 'متوسط الدرجات',
-                    data: [75, 82, 79, 85],
-                    backgroundColor: ['#1E5B3C', '#72B132', '#C5A059', '#1E5B3C'],
-                    borderRadius: 10
-                }]
-            },
-            options: { 
-                responsive: true,
-                plugins: { legend: { display: false } }
-            }
+        let gradeChart, passPieChart;
+
+        // تهيئة الرسوم البيانية فارغة
+        function initCharts() {
+            const ctxGrade = document.getElementById('gradeChart').getContext('2d');
+            gradeChart = new Chart(ctxGrade, {
+                type: 'bar',
+                data: {
+                    labels: ['ممتاز (36-40)', 'جيد جداً (32-35)', 'جيد (28-31)', 'مقبول (20-27)', 'غير مجتاز (<20)'],
+                    datasets: [{
+                        label: 'عدد الطلاب',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: ['#1E5B3C', '#72B132', '#C5A059', '#3b82f6', '#ef4444']
+                    }]
+                }
+            });
+
+            const ctxPie = document.getElementById('passPieChart').getContext('2d');
+            passPieChart = new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ['ناجح', 'راسب'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#72B132', '#ef4444']
+                    }]
+                }
+            });
+        }
+
+        // معالجة ملف الإكسل
+        document.getElementById('excelInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('fileNameDisplay').innerText = "تم تحميل ملف: " + file.name;
+            const reader = new FileReader();
+            
+            reader.onload = function(evt) {
+                const data = evt.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const firstSheet = workbook.SheetNames[0];
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { header: 1 });
+
+                processGrades(rows);
+            };
+            reader.readAsBinaryString(file);
         });
 
-        function changeView(type) {
-            if(type === 'main') {
-                document.getElementById('title').innerText = "نظام تحليل البيانات الإحصائي";
-                myChart.data.datasets[0].data = [88, 90, 85, 95];
-            } else {
-                document.getElementById('title').innerText = "تحليل أداء طلاب الكيمياء";
-                myChart.data.datasets[0].data = [75, 82, 79, 85];
-            }
-            myChart.update();
+        function processGrades(rows) {
+            // استخراج الدرجات (تخطي العناوين إذا وجدت)
+            let scores = [];
+            rows.forEach((row, index) => {
+                if (index === 0 && isNaN(row[1])) return; // تخطي الرأس
+                if (row[1] !== undefined) scores.push(parseFloat(row[1]));
+            });
+
+            const total = scores.length;
+            const sum = scores.reduce((a, b) => a + b, 0);
+            const avg = (sum / total).toFixed(1);
+            const max = Math.max(...scores);
+            
+            // توزيع المستويات
+            let levels = [0, 0, 0, 0, 0]; // ممتاز، جدا، جيد، مقبول، راسب
+            let passed = 0;
+
+            scores.forEach(s => {
+                if (s >= 36) levels[0]++;
+                else if (s >= 32) levels[1]++;
+                else if (s >= 28) levels[2]++;
+                else if (s >= 20) levels[3]++;
+                else levels[4]++;
+
+                if (s >= 20) passed++;
+            });
+
+            const passPercentage = ((passed / total) * 100).toFixed(1);
+
+            // تحديث الأرقام في الواجهة
+            document.getElementById('totalStudents').innerText = total;
+            document.getElementById('avgScore').innerText = avg;
+            document.getElementById('passRate').innerText = passPercentage + "%";
+            document.getElementById('maxScore').innerText = max;
+
+            // تحديث الرسوم البيانية
+            gradeChart.data.datasets[0].data = levels;
+            gradeChart.update();
+
+            passPieChart.data.datasets[0].data = [passed, total - passed];
+            passPieChart.update();
         }
+
+        window.onload = initCharts;
     </script>
 </body>
 </html>
