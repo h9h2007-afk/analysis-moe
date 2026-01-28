@@ -7,22 +7,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f0f4f8; scroll-behavior: smooth; }
         .moe-green { background-color: #1E5B3C; }
         .moe-gold { color: #C5A059; }
         
         /* إعدادات الطباعة الاحترافية */
         @media print {
-            @page { size: A4 landscape; margin: 0; }
+            @page { size: A4 portrait; margin: 0; }
             .no-print { display: none !important; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .print-page { page-break-after: always; width: 297mm; height: 210mm; padding: 12mm; margin: 0 auto; position: relative; }
-            .certificate-container { border: 12px double #1E5B3C; padding: 20px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: white; }
+            main { padding: 0 !important; width: 100% !important; margin: 0 !important; }
+            .print-container { 
+                width: 210mm; min-height: 297mm;
+                padding: 10mm 15mm !important; margin: 0 auto;
+                border: none !important; box-shadow: none !important;
+            }
+            .cert-page { page-break-before: always; width: 210mm; height: 297mm; padding: 15mm; display: flex; align-items: center; justify-content: center; }
+            .cert-border { border: 12px double #1E5B3C; padding: 30px; height: 100%; width: 100%; text-align: center; background: white; position: relative; }
             img, canvas { display: block !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+
+        .card-stat { transition: transform 0.3s ease; }
+        .card-stat:hover { transform: translateY(-5px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
     </style>
 </head>
@@ -30,31 +40,32 @@
 
     <div class="flex flex-col lg:flex-row min-h-screen">
         
-        <aside class="no-print lg:w-85 moe-green text-white p-6 shadow-2xl flex flex-col space-y-4">
+        <aside class="no-print lg:w-85 moe-green text-white p-6 shadow-2xl flex flex-col space-y-4 z-50">
             <div class="text-center pb-4 border-b border-white/10">
-                <h1 class="text-lg font-black italic text-amber-400">منصة التميز الرقمي</h1>
-                <p class="text-[10px] font-bold uppercase tracking-widest opacity-70 italic">نظام مدرسة زيد بن ثابت</p>
+                <h1 class="text-xl font-black italic text-amber-400">منصة التميز التعليمي</h1>
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-70">نظام إدارة مدرسة زيد بن ثابت</p>
             </div>
 
             <div class="space-y-3 overflow-y-auto pr-1 custom-scrollbar">
-                <label class="block text-[10px] font-bold text-emerald-400 uppercase">1. البيانات الإدارية</label>
-                <input type="text" id="schoolName" value="مدرسة زيد بن ثابت الثانوية" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2 focus:ring-2 focus:ring-amber-500 shadow-inner">
+                <label class="block text-[10px] font-bold text-emerald-400 uppercase tracking-tighter">1. البيانات الإدارية</label>
+                <input type="text" id="schoolName" value="مدرسة زيد بن ثابت الثانوية" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-amber-500 shadow-inner">
                 
-                <label class="block text-[10px] font-bold text-emerald-400 uppercase">2. رفع الشعار الرسمي (png)</label>
+                <label class="block text-[10px] font-bold text-emerald-400 uppercase mt-2">2. حل مشكلة الشعار (ارفع الملف)</label>
                 <input type="file" id="logoInput" accept="image/*" class="text-[10px] block w-full bg-white/5 border border-white/10 p-2 rounded-lg cursor-pointer" onchange="loadLogo(event)">
-                
-                <label class="block text-[10px] font-bold text-emerald-400 uppercase">3. المادة والمعلم</label>
+                <p class="text-[8px] text-white/40 italic">* ارفع صورة "الشعار بدون خلفية.png" لضمان ظهورها في الطباعة والشهادات.</p>
+
+                <label class="block text-[10px] font-bold text-emerald-400 uppercase mt-2">3. المادة والمعلم</label>
                 <select id="subjectName" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none text-white font-bold">
                     <option value="كيمياء" class="text-black">كيمياء</option>
                     <option value="فيزياء" class="text-black">فيزياء</option>
                     <option value="أحياء" class="text-black">أحياء</option>
                     <option value="رياضيات" class="text-black">رياضيات</option>
                 </select>
-                <input type="text" id="teacherName" value="حسن آل هاشم" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none mb-2">
+                <input type="text" id="teacherName" value="حسن آل هاشم" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none">
                 <input type="text" id="principalName" placeholder="اسم مدير المدرسة" class="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-sm outline-none">
                 
-                <div class="bg-black/30 p-4 rounded-2xl border border-white/10 text-center">
-                    <label class="block text-[10px] font-bold text-emerald-400 mb-1">الدرجة الكبرى للاختبار</label>
+                <div class="bg-black/30 p-4 rounded-2xl border border-white/10 text-center shadow-lg">
+                    <label class="block text-[10px] font-bold text-emerald-400 mb-1">الدرجة النهائية الكبرى</label>
                     <input type="number" id="maxGrade" value="40" class="w-full bg-transparent text-white font-black text-3xl outline-none text-center" oninput="processAndAnalyze()">
                 </div>
 
@@ -64,94 +75,119 @@
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
                     <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition">📂 رفع ملف الدرجات</label>
                     
-                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 rounded-xl shadow-xl transition active:scale-95">🔄 دمج وإصدار الشهادات</button>
+                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 rounded-xl shadow-xl transition active:scale-95">🔄 دمج وتحليل وإصدار الشهادات</button>
                     <button onclick="window.print()" class="w-full border-2 border-white/30 text-white font-bold py-3 rounded-xl hover:bg-white/10 transition">🖨️ طباعة التقرير والشهادات</button>
                 </div>
             </div>
         </aside>
 
         <main class="flex-1 p-4 lg:p-8">
-            <div class="print-page bg-white rounded-3xl p-8 shadow-sm border border-slate-100 relative mb-12">
-                <div class="flex justify-between items-center border-b-4 border-emerald-900 pb-6 mb-8">
+            <div class="print-container bg-white rounded-3xl p-10 shadow-sm border border-slate-100 relative mb-12">
+                
+                <div class="flex justify-between items-center border-b-4 border-emerald-900 pb-8 mb-8">
                     <div class="text-right w-1/3">
                         <p class="font-black text-2xl text-emerald-900" id="p_school"></p>
-                        <p class="font-bold text-sm">المادة: <span id="p_subject" class="underline underline-offset-4 decoration-amber-500"></span></p>
-                        <p class="text-xs italic">المعلم: <span id="p_teacher"></span></p>
+                        <p class="font-bold text-sm mt-1">المادة: <span id="p_subject" class="underline underline-offset-4 decoration-amber-500"></span></p>
+                        <p class="text-xs italic">معلم المادة: <span id="p_teacher"></span></p>
                     </div>
                     <div class="text-center w-1/3">
                         <img id="mainLogo" src="" class="h-20 mx-auto hidden" alt="Logo">
-                        <p class="font-black text-[10px] uppercase tracking-widest text-emerald-900">المملكة العربية السعودية</p>
+                        <p class="font-black text-[10px] mt-2 uppercase tracking-widest text-emerald-900">المملكة العربية السعودية</p>
+                        <p class="font-bold text-[9px] text-slate-400 italic">نظام التحليل الرقمي المعتمد</p>
                     </div>
-                    <div class="text-left w-1/3 text-[10px] space-y-0.5 italic">
+                    <div class="text-left w-1/3 text-[10px] space-y-0.5">
                         <p>تاريخ التقرير: 28 يناير 2026</p>
                         <p>الدرجة الكبرى: <span id="p_max" class="font-bold text-emerald-900 text-lg"></span></p>
-                        <p>المدير: <span id="p_principal" class="font-bold border-b border-slate-300"></span></p>
+                        <p>المدير: <span id="p_principal" class="font-bold border-b border-slate-300 min-w-[80px] inline-block text-center"></span></p>
                     </div>
                 </div>
 
                 <div class="no-print mb-8 relative">
-                    <label class="block text-sm font-bold text-slate-500 mb-2 italic">🔎 البحث الفوري عن نتيجة طالب:</label>
-                    <input type="text" id="studentSearch" oninput="searchStudent()" placeholder="اكتب اسم الطالب هنا..." class="w-full p-4 rounded-2xl border-2 border-emerald-100 focus:border-emerald-500 outline-none transition bg-emerald-50/20 font-bold shadow-sm">
+                    <label class="block text-sm font-bold text-slate-500 mb-2 italic">🔎 البحث الفوري عن مجموع طالب (من العمود الأخير):</label>
+                    <input type="text" id="studentSearch" oninput="searchStudent()" placeholder="اكتب اسم الطالب للتحقق..." class="w-full p-4 rounded-2xl border-2 border-emerald-100 focus:border-emerald-500 outline-none transition bg-emerald-50/20 font-bold shadow-sm">
                     <div id="searchResults" class="absolute z-50 w-full mt-2 bg-white rounded-2xl shadow-xl border hidden max-h-60 overflow-y-auto custom-scrollbar"></div>
                 </div>
 
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <div class="bg-emerald-50/50 p-5 rounded-3xl border-r-4 border-emerald-900 shadow-sm"><p class="text-[9px] font-bold text-slate-400">إجمالي الطلاب</p><h3 id="totalStudents" class="text-3xl font-black">0</h3></div>
-                    <div class="bg-amber-50/50 p-5 rounded-3xl border-r-4 border-amber-500 shadow-sm"><p class="text-[9px] font-bold text-slate-400">متوسط الدرجات</p><h3 id="avgScore" class="text-3xl font-black">0</h3></div>
-                    <div class="bg-blue-50/50 p-5 rounded-3xl border-r-4 border-blue-600 shadow-sm"><p class="text-[9px] font-bold text-slate-400">نسبة النجاح</p><h3 id="passRate" class="text-3xl font-black">0%</h3></div>
-                    <div class="bg-rose-50/50 p-5 rounded-3xl border-r-4 border-rose-600 shadow-sm"><p class="text-[9px] font-bold text-slate-400">أعلى مجموع</p><h3 id="maxScore" class="text-3xl font-black">0</h3></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                    <div class="card-stat bg-emerald-50/50 p-6 rounded-3xl border-r-8 border-emerald-900 shadow-sm">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">إجمالي الطلاب</p>
+                        <h3 id="totalStudents" class="text-4xl font-black text-slate-800">0</h3>
+                    </div>
+                    <div class="card-stat bg-amber-50/50 p-6 rounded-3xl border-r-8 border-amber-500 shadow-sm">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">متوسط الدرجات</p>
+                        <h3 id="avgScore" class="text-4xl font-black text-slate-800">0</h3>
+                    </div>
+                    <div class="card-stat bg-blue-50/50 p-6 rounded-3xl border-r-8 border-blue-600 shadow-sm">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">نسبة النجاح</p>
+                        <h3 id="passRate" class="text-4xl font-black text-slate-800">0%</h3>
+                    </div>
+                    <div class="card-stat bg-rose-50/50 p-6 rounded-3xl border-r-8 border-rose-600 shadow-sm">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">أعلى مجموع</p>
+                        <h3 id="maxScore" class="text-4xl font-black text-slate-800">0</h3>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <div class="h-[320px] border rounded-2xl p-4 shadow-sm bg-white"><canvas id="gradeChart"></canvas></div>
-                    <div class="h-[320px] border rounded-2xl p-4 shadow-sm bg-white"><canvas id="qualityChart"></canvas></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                    <div class="h-[350px] border border-slate-100 rounded-[2rem] p-6 shadow-sm bg-white"><canvas id="gradeChart"></canvas></div>
+                    <div class="h-[350px] border border-slate-100 rounded-[2rem] p-6 shadow-sm bg-white"><canvas id="qualityChart"></canvas></div>
+                </div>
+
+                <div class="border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm">
+                    <table class="w-full text-right text-[12px] font-bold">
+                        <thead class="bg-slate-50 border-b italic font-black uppercase">
+                            <tr><th class="p-4 px-8">التقدير (النسبة المئوية)</th><th class="p-4 text-center">العدد</th><th class="p-4 text-center text-emerald-800">النسبة %</th></tr>
+                        </thead>
+                        <tbody id="resultTable" class="divide-y divide-slate-100 text-center text-slate-400 italic font-medium">
+                            <tr><td colspan="3" class="p-10">بانتظار تحليل بيانات الاختبار النهائي لمدرسة زيد بن ثابت...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div id="certificatesArea" class="space-y-12"></div>
+            <div id="certificatesArea" class="space-y-12 no-print-section"></div>
         </main>
     </div>
 
     <script>
         let workbook, gradeChart, qualityChart;
         let studentsList = [];
-        let logoDataUrl = ""; // لتخزين الشعار المرفوع
+        let logoBase64 = "";
 
         function initCharts() {
             const config = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
             gradeChart = new Chart(document.getElementById('gradeChart'), {
                 type: 'bar',
-                data: { labels: ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'], datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#1E5B3C', '#22c55e', '#f59e0b', '#3b82f6', '#ef4444'], borderRadius: 10 }] },
+                data: { labels: ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'], datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#064e3b', '#059669', '#d97706', '#2563eb', '#dc2626'], borderRadius: 12 }] },
                 options: config
             });
             qualityChart = new Chart(document.getElementById('qualityChart'), {
                 type: 'line',
-                data: { labels: ['0%', '25%', '50%', '75%', '100%'], datasets: [{ data: [0,0,0,0,0], borderColor: '#1E5B3C', backgroundColor: 'rgba(30,91,60,0.1)', fill: true, tension: 0.5 }] },
+                data: { labels: ['0%', '25%', '50%', '75%', '100%'], datasets: [{ data: [0,0,0,0,0], borderColor: '#1E5B3C', backgroundColor: 'rgba(30,91,60,0.08)', fill: true, tension: 0.5 }] },
                 options: config
             });
         }
 
-        // رفع الشعار وحل مشكلة عدم الظهور
+        // رفع الشعار وحفظه في الذاكرة لضمان ظهوره في الطباعة
         function loadLogo(event) {
             const file = event.target.files[0];
             const reader = new FileReader();
             reader.onload = (e) => {
-                logoDataUrl = e.target.result;
-                const mainLogoImg = document.getElementById('mainLogo');
-                mainLogoImg.src = logoDataUrl;
-                mainLogoImg.classList.remove('hidden');
-                alert("✅ تم تحميل الشعار بنجاح!");
+                logoBase64 = e.target.result;
+                const mainLogo = document.getElementById('mainLogo');
+                mainLogo.src = logoBase64;
+                mainLogo.classList.remove('hidden');
+                alert("✅ تم تحميل الشعار الرسمي بنجاح!");
             };
             reader.readAsDataURL(file);
         }
 
-        // تحميل النموذج المعتمد لمدرسة زيد بن ثابت
+        // تحميل النموذج المعتمد
         function downloadTemplate() {
-            const data = [ ["اسم الطالب", "مجموع الاختبار النهائي"], ["مثال: أحمد علي", 40], ["مثال: فهد محمد", 32] ];
+            const data = [ ["اسم الطالب", "مجموع الاختبار النهائي"], ["أحمد محمد", 40], ["خالد علي", 35] ];
             const ws = XLSX.utils.aoa_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "الدرجات");
-            XLSX.writeFile(wb, "نموذج_رصد_زيد_بن_ثابت.xlsx");
+            XLSX.writeFile(wb, "نموذج_رصد_مدرسة_زيد_بن_ثابت.xlsx");
         }
 
         document.getElementById('excelInput').addEventListener('change', (e) => {
@@ -166,17 +202,20 @@
             const subject = document.getElementById('subjectName').value;
             const teacher = document.getElementById('teacherName').value;
             const school = document.getElementById('schoolName').value;
-            const principal = document.getElementById('principalName').value || "..................";
+            const principal = document.getElementById('principalName').value || "...";
             
             studentsList = [];
             let counts = [0, 0, 0, 0, 0]; let successCount = 0;
 
             workbook.SheetNames.forEach(name => {
-                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[name], { header: 1 });
+                const sheet = workbook.Sheets[name];
+                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                 if (rows.length === 0) return;
 
                 const headerRow = rows[0];
+                // العثور على عمود المجموع (الأولوية للاسم، ثم العمود الأخير)
                 let scoreIdx = headerRow.findIndex(c => c && c.toString().trim().includes("مجموع الاختبار النهائي"));
+                if (scoreIdx === -1) scoreIdx = headerRow.findIndex(c => c && c.toString().trim().includes("المجموع"));
                 if (scoreIdx === -1) scoreIdx = headerRow.length - 1;
 
                 rows.forEach((row, i) => {
@@ -212,20 +251,20 @@
             document.getElementById('p_max').innerText = maxG;
             document.getElementById('p_principal').innerText = principal;
 
-            // توليد شهادات المتفوقين
+            // توليد شهادات المتفوقين (تقدير ممتاز)
             const certArea = document.getElementById('certificatesArea');
             certArea.innerHTML = "";
             const excellent = studentsList.filter(st => st.grade === "ممتاز");
             excellent.forEach(st => {
                 certArea.innerHTML += `
-                    <div class="print-page bg-white">
-                        <div class="certificate-container shadow-2xl relative overflow-hidden">
-                            ${logoDataUrl ? `<img src="${logoDataUrl}" class="h-24 mb-6">` : '<div class="h-24 mb-6"></div>'}
+                    <div class="cert-page bg-white">
+                        <div class="cert-border shadow-2xl">
+                            ${logoBase64 ? `<img src="${logoBase64}" class="h-24 mx-auto mb-6">` : '<div class="h-24 mb-6"></div>'}
                             <h1 class="text-4xl font-black text-emerald-900 mb-2">شهادة تفوق واعتزاز</h1>
                             <p class="text-lg italic mb-6">تتقدم إدارة <strong>${school}</strong></p>
                             <p class="text-lg mb-2 italic">بالتهنئة والتقدير للطالب المتميز:</p>
-                            <h2 class="text-5xl font-black text-amber-600 mb-10 border-b-2 border-amber-100 px-10 pb-4">${st.name}</h2>
-                            <p class="text-xl leading-relaxed max-w-2xl mb-12">
+                            <h2 class="text-5xl font-black text-amber-600 mb-10 border-b-2 border-amber-100 px-10 pb-4 inline-block">${st.name}</h2>
+                            <p class="text-xl leading-relaxed max-w-2xl mx-auto mb-12 italic">
                                 نظير تفوقه الباهر وحصوله على تقدير <strong>(${st.grade})</strong> في مادة <strong>(${subject})</strong> 
                                 بمجموع درجات <strong>(${st.score})</strong> من أصل <strong>(${maxG})</strong>.
                             </p>
@@ -238,7 +277,11 @@
                     </div>
                 `;
             });
-            alert(`✅ تم التحليل وإصدار ${excellent.length} شهادة!`);
+
+            document.getElementById('resultTable').innerHTML = counts.map((c, i) => `
+                <tr><td class="p-3 px-8 font-bold text-slate-700 text-right italic">${['ممتاز (90%+)', 'جيد جداً (80%+)', 'جيد (70%+)', 'مقبول (50%+)', 'لم يجتز'][i]}</td><td class="p-3 font-black text-emerald-800 text-lg">${c} طالباً</td><td class="p-3 font-mono text-slate-400 font-bold">${((c/total)*100).toFixed(1)}%</td></tr>
+            `).join('');
+            alert(`✅ تم التحليل وإصدار ${excellent.length} شهادة تفوق.`);
         }
 
         function searchStudent() {
@@ -248,7 +291,7 @@
             const filtered = studentsList.filter(st => st.name && st.name.toLowerCase().includes(query));
             resultsDiv.innerHTML = filtered.map(st => `
                 <div class="p-4 border-b hover:bg-emerald-50 cursor-pointer flex justify-between items-center transition" onclick="sendWA('${st.name}', '${st.score}', '${st.grade}')">
-                    <div class="text-right"><span class="font-bold text-slate-800 block italic">${st.name}</span><span class="text-[10px] text-slate-500 font-bold">المجموع: ${st.score} | التقدير: ${st.grade}</span></div>
+                    <div class="text-right"><span class="font-bold text-slate-800 block italic">${st.name}</span><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">مجموع الاختبار: ${st.score} | التقدير: ${st.grade}</span></div>
                     <button class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full font-black shadow-md">إرسال واتساب 📱</button>
                 </div>
             `).join('');
