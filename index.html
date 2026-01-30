@@ -3,72 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة التميز الرقمي | V63 الإبداع الجرافيكي</title>
+    <title>منصة التميز الرقمي | V64 الموثوقية القصوى</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@400;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --royal-blue: #1A365D; 
-            --gold-accent: #D4AF37; 
-            --soft-bg: #F7FAFC;
-        }
+        :root { --royal-blue: #1A365D; --gold-accent: #D4AF37; --soft-bg: #F7FAFC; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--soft-bg); margin: 0; }
         .sidebar-royal { background: linear-gradient(180deg, #1A365D 0%, #171923 100%); }
         
-        /* ---------------------------------------------------------
-           هندسة الطباعة الجرافيكية V63 - حل مشكلة قص التواقيع
-        --------------------------------------------------------- */
+        /* هندسة الطباعة الجرافيكية لمنع قص التواقيع */
         @media print {
             @page { size: A4 landscape !important; margin: 0 !important; }
             .no-print { display: none !important; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
-            /* تثبيت الارتفاع عند 170mm لضمان ظهور المعلم والمدير داخل الورقة */
             .print-page { 
-                width: 297mm !important; 
-                height: 170mm !important; 
-                padding: 10mm !important; 
-                margin: 0 auto !important; 
-                display: flex !important; 
-                flex-direction: column !important;
-                box-sizing: border-box !important; 
-                position: relative; 
-                overflow: hidden !important;
-                page-break-after: always !important; 
-                transform: scale(0.92); /* تصغير مدروس للاحتواء الجرافيكي */
+                width: 297mm !important; height: 170mm !important; 
+                padding: 10mm !important; margin: 0 auto !important; 
+                display: flex !important; flex-direction: column !important;
+                box-sizing: border-box !important; position: relative; overflow: hidden !important;
+                page-break-after: always !important; transform: scale(0.92);
             }
-
-            /* منع تداخل الرسوم في التقارير */
-            .charts-grid-print { 
-                display: grid !important; 
-                grid-template-columns: repeat(3, 1fr) !important; 
-                gap: 15px !important; 
-                height: 140px !important; 
-                width: 100% !important;
-            }
-            .chart-box { height: 130px !important; position: relative !important; }
-
-            /* تصميم الشهادة المطور - إطار جرافيكي مبهج */
+            .print-page:last-child { page-break-after: auto !important; }
+            .charts-grid-print { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 15px !important; height: 140px !important; }
             .cert-container { 
-                width: 100% !important; height: 100% !important; 
-                background: white !important;
-                border: 15px solid transparent !important;
+                width: 100% !important; height: 100% !important; border: 15px solid transparent !important;
                 border-image: linear-gradient(135deg, var(--royal-blue), var(--gold-accent)) 1 !important;
-                padding: 30px !important; 
-                text-align: center !important; 
-                position: relative !important;
-                box-sizing: border-box !important;
+                padding: 30px !important; text-align: center !important; position: relative; box-sizing: border-box !important;
             }
-            
             .mode-report .cert-item { display: none !important; }
             .mode-certs #dashboardReport { display: none !important; }
         }
-
-        .btn-modern { background: linear-gradient(135deg, var(--gold-accent) 0%, #B8860B 100%); color: white; font-weight: 900; transition: 0.3s; }
-        .custom-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.75rem; padding: 0.7rem; color: white; width: 100%; outline: none; }
+        .status-ready { background: #22c55e !important; box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
     </style>
 </head>
 <body class="text-slate-800" id="mainAppBody">
@@ -76,83 +44,17 @@
     <div class="flex flex-col lg:flex-row min-h-screen">
         <aside class="no-print lg:w-96 sidebar-royal text-white p-8 shadow-2xl flex flex-col space-y-4 z-50">
             <div class="text-center pb-4 border-b border-white/10">
-                <div class="w-16 h-16 bg-white/10 rounded-2xl mx-auto mb-2 flex items-center justify-center border border-white/20">
-                    <span class="text-3xl">💎</span>
-                </div>
-                <h1 class="text-lg font-black text-amber-400">منصة التميز V63</h1>
-                <p class="text-[9px] text-blue-300 font-bold uppercase tracking-widest mt-1">نسخة الإتقان الجرافيكي</p>
+                <h1 class="text-lg font-black text-amber-400">منصة التميز V64</h1>
+                <p class="text-[9px] text-blue-300 font-bold uppercase tracking-widest mt-1">نسخة الموثوقية القصوى</p>
             </div>
 
             <div class="space-y-2 overflow-y-auto pr-1">
-                <input type="text" id="schoolName" placeholder="اسم المدرسة..." class="custom-input font-bold text-xs" value="مدرسة زيد بن ثابت الثانوية">
-                <input type="text" id="subjectName" placeholder="المادة..." class="custom-input font-bold text-xs">
-                <input type="text" id="teacherName" placeholder="اسم المعلم..." class="custom-input font-bold text-xs" value="حسن آل هاشم">
-                <input type="text" id="principalName" placeholder="مدير المدرسة..." class="custom-input font-bold text-xs">
-                
-                <div class="mt-2 bg-white/5 p-3 rounded-2xl border border-white/10">
-                    <label class="block text-[10px] font-bold text-blue-300 mb-2">🖼️ رفع الشعار الرسمي (PNG)</label>
-                    <input type="file" id="logoInput" accept="image/*" class="text-[8px] block w-full cursor-pointer" onchange="loadLogo(event)">
-                </div>
+                <input type="text" id="schoolName" placeholder="اسم المدرسة..." class="w-full bg-white/5 border border-white/20 p-3 rounded-xl text-xs font-bold" value="مدرسة زيد بن ثابت الثانوية">
+                <input type="text" id="subjectName" placeholder="المادة..." class="w-full bg-white/5 border border-white/20 p-3 rounded-xl text-xs font-bold">
+                <input type="text" id="teacherName" placeholder="اسم المعلم..." class="w-full bg-white/5 border border-white/20 p-3 rounded-xl text-xs font-bold" value="حسن آل هاشم">
+                <input type="text" id="principalName" placeholder="مدير المدرسة..." class="w-full bg-white/5 border border-white/20 p-3 rounded-xl text-xs font-bold">
 
-                <div class="bg-black/30 p-4 rounded-2xl text-center">
-                    <label class="block text-[10px] font-bold text-amber-400 mb-1">الدرجة الكلية</label>
-                    <input type="number" id="maxGrade" value="40" class="w-full bg-transparent text-white font-black text-4xl outline-none text-center">
-                </div>
-
-                <div class="pt-4 space-y-2">
-                    <button onclick="downloadExcelTemplate()" class="w-full bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold py-3 rounded-xl border border-white/20 transition">📥 نموذج الإكسل</button>
+                <div class="mt-2 bg-black/20 p-4 rounded-2xl border border-white/10 text-center">
+                    <label class="block text-[10px] font-bold text-blue-300 mb-3 uppercase tracking-tighter">📥 خطوة 1: اختيار ملف الإكسل</label>
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
-                    <label for="excelInput" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition">📂 رفع ملف الدرجات</label>
-                    <button onclick="processAndAnalyze()" class="w-full btn-modern py-3 rounded-xl shadow-xl uppercase text-xs">✨ تحليل النتائج وتصميم الشهادات</button>
-                    <hr class="border-white/10 my-2">
-                    <button onclick="runPrint('report')" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📊 طباعة التقرير (ثابت)</button>
-                    <button onclick="runPrint('certs')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📜 طباعة الشهادات الجرافيكية</button>
-                </div>
-            </div>
-        </aside>
-
-        <main class="flex-1 p-6 lg:p-10 overflow-x-hidden">
-            <div id="dashboardReport" class="print-page bg-white rounded-[2.5rem] p-10 shadow-2xl border border-white relative mb-16 overflow-hidden">
-                <div class="flex justify-between items-center border-b-2 border-slate-100 pb-4 mb-4 relative z-10">
-                    <div class="text-right w-1/3">
-                        <p class="font-black text-2xl text-blue-900" id="p_school"></p>
-                        <p class="font-bold text-lg text-orange-500 mt-1 italic">المادة: <span id="p_subject"></span></p>
-                        <p class="text-xs font-bold text-slate-400">المعلم: <span id="p_teacher"></span></p>
-                    </div>
-                    <div class="text-center w-1/3">
-                        <img id="mainLogo" src="" class="h-20 mx-auto hidden drop-shadow-lg">
-                        <p class="font-black text-[10px] mt-2 uppercase tracking-[0.3em] text-blue-900">المملكة العربية السعودية</p>
-                    </div>
-                    <div class="text-left w-1/3 text-[10px] font-bold text-slate-400">
-                        <p>تاريخ التحليل: 30 يناير 2026</p>
-                        <p class="text-blue-900 text-2xl font-black mt-2">المقياس: <span id="p_max"></span></p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-4 gap-6 mb-6 text-center">
-                    <div class="bg-blue-50 p-5 rounded-3xl border-b-4 border-blue-900"><p class="text-[10px] font-black uppercase mb-1">الطلاب</p><h3 id="totalStudents" class="text-3xl font-black text-slate-800">0</h3></div>
-                    <div class="bg-orange-50 p-5 rounded-3xl border-b-4 border-orange-500"><p class="text-[10px] font-black uppercase mb-1">المتوسط</p><h3 id="avgScore" class="text-3xl font-black">0</h3></div>
-                    <div class="bg-emerald-50 p-5 rounded-3xl border-b-4 border-emerald-600"><p class="text-[10px] font-black uppercase mb-1">النجاح</p><h3 id="passRate" class="text-3xl font-black">0%</h3></div>
-                    <div class="bg-rose-50 p-5 rounded-3xl border-b-4 border-rose-600"><p class="text-[10px] font-black uppercase mb-1">الأعلى</p><h3 id="maxScore" class="text-3xl font-black">0</h3></div>
-                </div>
-
-                <div class="charts-grid-print">
-                    <div class="chart-box bg-slate-50 rounded-2xl p-2"><canvas id="gradeChart"></canvas></div>
-                    <div class="chart-box bg-slate-50 rounded-2xl p-2"><canvas id="pieChart"></canvas></div>
-                    <div class="chart-box bg-slate-50 rounded-2xl p-2"><canvas id="qualityChart"></canvas></div>
-                </div>
-            </div>
-            <div id="certificatesArea" class="space-y-12"></div>
-        </main>
-    </div>
-
-    <script>
-        let workbook = null;
-        let gradeChart, pieChart, qualityChart;
-        let logoBase64 = "";
-
-        function initCharts() {
-            const opt = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { font: { size: 8 } } } } };
-            gradeChart = new Chart(document.getElementById('gradeChart'), { type: 'bar', data: { labels: [], datasets: [{ data: [], backgroundColor: ['#2B6CB0','#48BB78','#ECC94B','#ED8936','#F56565'], borderRadius: 6 }] }, options: opt });
-            pieChart = new Chart(document.getElementById('pieChart'), { type: 'pie', data: { labels: ['ناجح', 'لم يجتز'], datasets: [{ data: [], backgroundColor: ['#2B6CB0', '#F56565'], borderWidth: 0 }] }, options: opt });
-            qualityChart = new Chart(document.getElementById('qualityChart'),
+                    <label for="excelInput" id="uploadBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition active:scale-9
