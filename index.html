@@ -11,71 +11,33 @@
     
     <style>
         :root { --primary: #1E5B3C; --accent: #C5A059; }
-        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; margin: 0; }
         .sidebar-royal { background: linear-gradient(180deg, #1E5B3C 0%, #081a11 100%); }
         
-        /* ---------------------------------------------------------
-           هندسة الطباعة الماسية V51 - الحل الجذري لمشكلة الانقسام
-        --------------------------------------------------------- */
         @media print {
-            @page { 
-                size: A4 landscape; /* إجبار الوضع العرضي */
-                margin: 0 !important; 
-            }
+            @page { size: A4 landscape; margin: 0 !important; }
             .no-print { display: none !important; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
-            /* تثبيت الصفحة بـ 185mm (أقل من A4 بـ 25mm) لتوفير أقصى منطقة أمان */
             .print-page { 
-                width: 297mm !important; 
-                height: 185mm !important; 
-                padding: 8mm !important; 
-                margin: 0 auto !important; 
-                display: flex !important; 
-                flex-direction: column !important;
-                box-sizing: border-box !important;
-                position: relative !important;
-                overflow: hidden !important; 
-                page-break-after: always !important;
-                transform: scale(0.95); /* تصغير إضافي بنسبة 5% لضمان الاحتواء */
+                width: 297mm !important; height: 185mm !important; 
+                padding: 8mm !important; margin: 0 auto !important; 
+                display: flex !important; flex-direction: column !important;
+                box-sizing: border-box !important; position: relative; overflow: hidden !important;
+                page-break-after: always !important; transform: scale(0.95);
             }
-
             .print-page:last-child { page-break-after: auto !important; }
-            
-            /* ضغط الرسوم البيانية لتظهر في صف واحد دون تداخل */
-            .charts-grid-print { 
-                display: flex !important; 
-                flex-direction: row !important;
-                justify-content: space-around !important;
-                align-items: center !important;
-                height: 160px !important; /* ارتفاع منخفض جداً لضمان الاحتواء */
-                width: 100% !important;
-                margin-top: 5px !important;
-            }
-
-            .chart-item { width: 31% !important; height: 100% !important; }
-
-            /* تصميم الشهادة المدمج */
-            .cert-container { 
-                width: 100% !important; height: 100% !important; 
-                border: 10px double var(--primary) !important; 
-                outline: 2px solid var(--accent) !important; 
-                outline-offset: -12px !important; 
-                padding: 15px !important; 
-                background: white !important; 
-                text-align: center !important; 
-                box-sizing: border-box !important;
-            }
-
+            .charts-grid-print { display: flex !important; justify-content: space-around !important; height: 160px !important; width: 100% !important; }
+            .cert-container { width: 100% !important; height: 100% !important; border: 10px double var(--primary) !important; outline: 2px solid var(--accent) !important; outline-offset: -12px !important; padding: 15px !important; background: white !important; text-align: center !important; box-sizing: border-box !important; }
             .mode-report .cert-item { display: none !important; }
             .mode-certs #dashboardReport { display: none !important; }
-            canvas, img { display: block !important; }
         }
 
-        /* واجهة المستخدم */
         .glass-card { background: white; border-radius: 2rem; border: 1px solid #e5e7eb; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .custom-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 1.25rem; padding: 0.8rem; color: white; width: 100%; outline: none; transition: 0.3s; }
         .custom-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 5px; }
+        .status-off { background: #ef4444; }
+        .status-on { background: #22c55e; }
     </style>
 </head>
 <body class="text-slate-800" id="mainAppBody">
@@ -84,14 +46,14 @@
         
         <aside class="no-print lg:w-96 sidebar-royal text-white p-8 shadow-2xl flex flex-col space-y-4 z-50">
             <div class="text-center pb-4 border-b border-white/10">
-                <h1 class="text-lg font-black text-amber-400">منصة التميز الرقمي V51</h1>
-                <p class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest mt-1">نسخة الإصلاح النهائي</p>
+                <h1 class="text-xl font-black text-amber-400">منصة التميز الرقمي V52</h1>
+                <p class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest mt-1">Stability & Fix Edition</p>
             </div>
 
             <div class="space-y-2 overflow-y-auto pr-1">
-                <input type="text" id="schoolName" placeholder="اسم المدرسة..." class="custom-input font-bold text-xs">
+                <input type="text" id="schoolName" placeholder="اسم المدرسة..." class="custom-input font-bold text-xs" value="مدرسة زيد بن ثابت الثانوية">
                 <input type="text" id="subjectName" placeholder="اسم المادة..." class="custom-input font-bold text-xs">
-                <input type="text" id="teacherName" placeholder="اسم المعلم..." class="custom-input font-bold text-xs">
+                <input type="text" id="teacherName" placeholder="اسم المعلم..." class="custom-input font-bold text-xs" value="حسن آل هاشم">
                 <input type="text" id="principalName" placeholder="مدير المدرسة..." class="custom-input font-bold text-xs">
                 
                 <div class="mt-2">
@@ -100,19 +62,27 @@
                 </div>
 
                 <div class="bg-black/30 p-4 rounded-[1.5rem] border border-white/10 text-center">
-                    <label class="block text-[10px] font-bold text-amber-400 mb-1">الدرجة الكلية القصوى</label>
-                    <input type="number" id="maxGrade" value="40" class="w-full bg-transparent text-white font-black text-4xl outline-none text-center" oninput="processAndAnalyze()">
+                    <label class="block text-[10px] font-bold text-amber-400 mb-1">الدرجة النهائية القصوى</label>
+                    <input type="number" id="maxGrade" value="40" class="w-full bg-transparent text-white font-black text-4xl outline-none text-center">
                 </div>
 
                 <div class="pt-4 space-y-2">
-                    <button onclick="downloadExcelTemplate()" class="w-full bg-white/5 hover:bg-white/10 text-white text-[10px] font-bold py-3 rounded-xl border border-white/20 transition">📥 تحميل نموذج الإكسل</button>
+                    <button onclick="downloadExcelTemplate()" class="w-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold py-3 rounded-xl border border-white/20 transition flex items-center justify-center gap-2">
+                        📥 تحميل نموذج الإكسل المعتمد
+                    </button>
+                    
+                    <div id="fileStatus" class="text-[10px] text-center mb-1 text-slate-300 italic">
+                        <span class="status-dot status-off" id="dot"></span> لم يتم رفع ملف بعد
+                    </div>
+                    
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
                     <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition">📂 رفع ملف الدرجات</label>
+                    
                     <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-black py-3 rounded-xl shadow-xl transition uppercase text-xs">✨ تحليل وإصدار الشهادات</button>
                     
                     <hr class="border-white/10 my-2">
-                    <button onclick="runPrint('report')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📊 طباعة التقرير (ثابت)</button>
-                    <button onclick="runPrint('certs')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📜 طباعة الشهادات (فقط)</button>
+                    <button onclick="runPrint('report')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📊 طباعة التقرير</button>
+                    <button onclick="runPrint('certs')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-xl shadow-xl transition text-xs">📜 طباعة الشهادات</button>
                 </div>
             </div>
         </aside>
@@ -121,7 +91,7 @@
             <div id="dashboardReport" class="print-page bg-white rounded-[2.5rem] p-8 shadow-2xl border border-white relative mb-12 overflow-hidden">
                 <div class="flex justify-between items-center border-b-2 border-slate-100 pb-4 mb-4">
                     <div class="text-right w-1/3">
-                        <p class="font-black text-2xl text-emerald-900 leading-tight" id="p_school"></p>
+                        <p class="font-black text-2xl text-emerald-900" id="p_school"></p>
                         <p class="font-bold text-lg text-amber-600 mt-1 italic">المادة: <span id="p_subject"></span></p>
                         <p class="text-xs font-bold text-slate-400">المعلم: <span id="p_teacher"></span></p>
                     </div>
@@ -130,25 +100,24 @@
                         <p class="font-black text-[10px] mt-1 uppercase tracking-[0.3em] text-emerald-900 leading-none">المملكة العربية السعودية</p>
                     </div>
                     <div class="text-left w-1/3 text-[10px] font-bold">
-                        <p class="text-slate-400 italic">30 يناير 2026</p>
+                        <p class="text-slate-400">30 يناير 2026</p>
                         <p class="text-slate-600 mt-1 italic font-black">الدرجة: <span id="p_max" class="text-emerald-900 text-xl font-black"></span></p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-4 gap-4 mb-4 text-center">
-                    <div class="bg-emerald-50/40 p-4 rounded-3xl border-r-4 border-emerald-900 shadow-sm"><p class="text-[9px] font-black uppercase mb-1 tracking-widest text-emerald-900">المجموع</p><h3 id="totalStudents" class="text-xl font-black text-slate-800">0</h3></div>
-                    <div class="bg-amber-50/40 p-4 rounded-3xl border-r-4 border-amber-500 shadow-sm"><p class="text-[9px] font-black uppercase mb-1 tracking-widest text-amber-800">المتوسط</p><h3 id="avgScore" class="text-xl font-black text-slate-800">0</h3></div>
-                    <div class="bg-blue-50/40 p-4 rounded-3xl border-r-4 border-blue-600 shadow-sm"><p class="text-[9px] font-black uppercase mb-1 tracking-widest text-blue-900">النجاح</p><h3 id="passRate" class="text-xl font-black text-slate-800">0%</h3></div>
-                    <div class="bg-rose-50/40 p-4 rounded-3xl border-r-4 border-rose-600 shadow-sm"><p class="text-[9px] font-black uppercase mb-1 tracking-widest text-rose-900">الأعلى</p><h3 id="maxScore" class="text-xl font-black text-slate-800">0</h3></div>
+                    <div class="bg-emerald-50/40 p-4 rounded-3xl border-r-4 border-emerald-900"><p class="text-[9px] font-black uppercase mb-1">المجموع</p><h3 id="totalStudents" class="text-xl font-black">0</h3></div>
+                    <div class="bg-amber-50/40 p-4 rounded-3xl border-r-4 border-amber-500"><p class="text-[9px] font-black uppercase mb-1">المتوسط</p><h3 id="avgScore" class="text-xl font-black">0</h3></div>
+                    <div class="bg-blue-50/40 p-4 rounded-3xl border-r-4 border-blue-600"><p class="text-[9px] font-black uppercase mb-1">النجاح</p><h3 id="passRate" class="text-xl font-black">0%</h3></div>
+                    <div class="bg-rose-50/40 p-4 rounded-3xl border-r-4 border-rose-600"><p class="text-[9px] font-black uppercase mb-1">الأعلى</p><h3 id="maxScore" class="text-xl font-black">0</h3></div>
                 </div>
 
                 <div class="charts-grid-print flex-1">
-                    <div class="chart-item p-2 glass-card"><canvas id="gradeChart"></canvas></div>
-                    <div class="chart-item p-2 glass-card"><canvas id="pieChart"></canvas></div>
-                    <div class="chart-item p-2 glass-card"><canvas id="qualityChart"></canvas></div>
+                    <div class="w-1/3 p-2 glass-card"><canvas id="gradeChart"></canvas></div>
+                    <div class="w-1/3 p-2 glass-card"><canvas id="pieChart"></canvas></div>
+                    <div class="w-1/3 p-2 glass-card"><canvas id="qualityChart"></canvas></div>
                 </div>
             </div>
-
             <div id="certificatesArea" class="space-y-12"></div>
         </main>
     </div>
@@ -172,55 +141,62 @@
         }
 
         function downloadExcelTemplate() {
-            const data = [["اسم الطالب", "مجموع الاختبار النهائي"], ["مثال طالب", 40]];
-            const ws = XLSX.utils.aoa_to_sheet(data);
-            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "الدرجات");
-            XLSX.writeFile(wb, "نموذج_رصد_مدرسة_زيد_بن_ثابت_V51.xlsx");
+            try {
+                const data = [["اسم الطالب", "مجموع الاختبار النهائي"], ["مثال طالب", 40]];
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "الدرجات");
+                XLSX.writeFile(wb, "نموذج_رصد_مدرسة_زيد_بن_ثابت_V52.xlsx");
+            } catch(e) { alert("المكتبة لم يتم تحميلها بعد. تأكد من اتصال الإنترنت."); }
         }
 
         document.getElementById('excelInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = (evt) => { workbook = XLSX.read(evt.target.result, { type: 'binary' }); alert("✅ تم ربط ملف البيانات بنجاح!"); };
-            reader.readAsBinaryString(e.target.files[0]);
+            reader.onload = (evt) => {
+                try {
+                    workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                    document.getElementById('dot').className = "status-dot status-on";
+                    document.getElementById('fileStatus').innerText = "✅ تم استلام ملف: " + file.name;
+                    alert("✅ تم ربط الملف بنجاح! اضغط الآن على زر التحليل.");
+                } catch(err) { alert("❌ خطأ في قراءة الملف."); }
+            };
+            reader.readAsBinaryString(file);
         });
 
         function processAndAnalyze() {
             if (!workbook) return alert("الرجاء رفع ملف الدرجات أولاً");
             const maxG = parseFloat(document.getElementById('maxGrade').value) || 40;
-            const subject = document.getElementById('subjectName').value;
-            const teacher = document.getElementById('teacherName').value;
-            const school = document.getElementById('schoolName').value;
-            const principal = document.getElementById('principalName').value || "...";
             
-            studentsList = []; let counts = [0, 0, 0, 0, 0]; let successCount = 0;
-            const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
-            let scoreIdx = rows[0].findIndex(c => c && c.toString().includes("المجموع")) || rows[0].length - 1;
+            try {
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                if (rows.length < 2) return alert("الملف فارغ!");
 
-            rows.forEach((row, i) => {
-                if (i === 0 || !row[0]) return;
-                const s = parseFloat(row[scoreIdx === -1 ? row.length-1 : scoreIdx]);
-                if (!isNaN(s)) {
-                    const p = (s / maxG) * 100;
-                    let g = "لم يجتز";
-                    if (p >= 90) { counts[0]++; g = "ممتاز"; }
-                    else if (p >= 80) { counts[1]++; g = "جيد جداً"; }
-                    else if (p >= 70) { counts[2]++; g = "جيد"; }
-                    else if (p >= 50) { counts[3]++; g = "مقبول"; }
-                    else counts[4]++;
-                    if (s >= (maxG * 0.5)) successCount++;
-                    studentsList.push({ name: row[0], score: s, grade: g });
-                }
-            });
+                studentsList = []; let counts = [0, 0, 0, 0, 0]; let successCount = 0;
+                let scoreIdx = rows[0].findIndex(c => c && (c.toString().includes("المجموع") || c.toString().includes("درجة"))) || rows[0].length - 1;
 
-            document.getElementById('totalStudents').innerText = studentsList.length;
-            document.getElementById('avgScore').innerText = (studentsList.reduce((a, b) => a + b.score, 0) / studentsList.length).toFixed(1);
-            document.getElementById('passRate').innerText = ((successCount/studentsList.length)*100).toFixed(0) + "%";
-            document.getElementById('maxScore').innerText = Math.max(...studentsList.map(st => st.score));
+                rows.forEach((row, i) => {
+                    if (i === 0 || !row[0]) return;
+                    const s = parseFloat(row[scoreIdx === -1 ? row.length-1 : scoreIdx]);
+                    if (!isNaN(s)) {
+                        const p = (s / maxG) * 100;
+                        let g = "لم يجتز";
+                        if (p >= 90) { counts[0]++; g = "ممتاز"; }
+                        else if (p >= 80) { counts[1]++; g = "جيد جداً"; }
+                        else if (p >= 70) { counts[2]++; g = "جيد"; }
+                        else if (p >= 50) { counts[3]++; g = "مقبول"; }
+                        else counts[4]++;
+                        if (s >= (maxG * 0.5)) successCount++;
+                        studentsList.push({ name: row[0], score: s, grade: g });
+                    }
+                });
 
-            updateCharts(counts, studentsList.length, successCount);
-            syncUI(school, subject, teacher, maxG);
-            generateCerts(studentsList.filter(st => st.grade === "ممتاز"), school, subject, teacher, maxG, principal);
-            alert(`✅ تم تحليل البيانات وإصدار ${studentsList.filter(st => st.grade === "ممتاز").length} شهادة ملكية!`);
+                updateCharts(counts, studentsList.length, successCount);
+                updateUI(maxG);
+                generateCerts(studentsList.filter(st => st.grade === "ممتاز"), maxG);
+                alert("✅ تمت معالجة درجات " + studentsList.length + " طالباً.");
+            } catch(e) { alert("حدث خطأ أثناء التحليل. تأكد من تنسيق الملف."); }
         }
 
         function updateCharts(counts, total, success) {
@@ -229,32 +205,42 @@
             pieChart.data.datasets[0].data = [success, total - success]; pieChart.update();
             qualityChart.data.labels = ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'].reverse();
             qualityChart.data.datasets[0].data = counts.slice().reverse(); qualityChart.update();
+
+            document.getElementById('totalStudents').innerText = total;
+            document.getElementById('avgScore').innerText = (studentsList.reduce((a, b) => a + b.score, 0) / total).toFixed(1);
+            document.getElementById('passRate').innerText = ((success/total)*100).toFixed(0) + "%";
+            document.getElementById('maxScore').innerText = Math.max(...studentsList.map(st => st.score));
         }
 
-        function syncUI(school, subject, teacher, maxG) {
-            document.getElementById('p_school').innerText = school;
-            document.getElementById('p_subject').innerText = subject;
-            document.getElementById('p_teacher').innerText = teacher;
+        function updateUI(maxG) {
+            document.getElementById('p_school').innerText = document.getElementById('schoolName').value;
+            document.getElementById('p_subject').innerText = document.getElementById('subjectName').value;
+            document.getElementById('p_teacher').innerText = document.getElementById('teacherName').value;
             document.getElementById('p_max').innerText = maxG;
         }
 
-        function generateCerts(excellent, school, subject, teacher, maxG, principal) {
+        function generateCerts(excellent, maxG) {
             const area = document.getElementById('certificatesArea'); area.innerHTML = "";
+            const school = document.getElementById('schoolName').value;
+            const subject = document.getElementById('subjectName').value;
+            const teacher = document.getElementById('teacherName').value;
+            const principal = document.getElementById('principalName').value || "...";
+
             excellent.forEach(st => {
                 area.innerHTML += `
                     <div class="print-page bg-white cert-item">
                         <div class="cert-container shadow-xl">
                             ${logoBase64 ? `<img src="${logoBase64}" class="h-16 mx-auto mb-4">` : '<div class="h-16 mb-4"></div>'}
-                            <h1 style="font-family: 'Amiri', serif;" class="text-4xl font-black text-emerald-900 mb-4 italic leading-none">شهادة شكر وتقدير</h1>
-                            <p class="text-xl mb-4 font-bold text-slate-500 italic">تتقدم إدارة <span class="text-emerald-800 underline decoration-amber-500 underline-offset-4">${school}</span></p>
-                            <p class="text-lg mb-2 font-bold italic">ببـالغ الفخـر والاعتزاز بتهنئة الطالب المتميز:</p>
-                            <h2 class="text-4xl font-black text-amber-600 mb-8 border-b-4 border-amber-100 px-8 pb-2 inline-block">${st.name}</h2>
-                            <p class="text-xl leading-relaxed max-w-4xl mx-auto mb-8 font-bold italic text-slate-700">
+                            <h1 style="font-family: 'Amiri', serif;" class="text-4xl font-black text-emerald-900 mb-2 italic">شهادة شكر وتقدير</h1>
+                            <p class="text-lg mb-4 font-bold text-slate-500 italic">تتقدم إدارة <span class="text-emerald-800 underline decoration-amber-500">${school}</span></p>
+                            <p class="text-md mb-2 font-bold">بفيض من الفخر والاعتزاز بتهنئة الطالب المتميز:</p>
+                            <h2 class="text-4xl font-black text-amber-600 mb-6 border-b-4 border-amber-100 px-8 pb-2 inline-block">${st.name}</h2>
+                            <p class="text-lg leading-relaxed max-w-4xl mx-auto mb-8 font-bold italic text-slate-700">
                                 لنيله درجة التميز الكاملة <strong>(${st.score})</strong> من <strong>(${maxG})</strong> بتقدير <strong>(${st.grade})</strong> في مادة <strong>(${subject})</strong>.
                             </p>
                             <div class="flex justify-between w-full px-24 mt-4 font-black text-lg italic text-emerald-900">
                                 <div class="text-center">معلم المادة<br><span class="text-slate-400 text-sm font-bold">${teacher}</span></div>
-                                <div class="text-center opacity-20 text-[9px] italic"><br>ختم المدرسة الرسمي</div>
+                                <div class="text-center opacity-20 text-[9px] italic"><br>ختم المدرسة</div>
                                 <div class="text-center">مدير المدرسة<br><span class="text-slate-400 text-sm font-bold">${principal}</span></div>
                             </div>
                         </div>
@@ -264,11 +250,11 @@
         }
 
         function runPrint(mode) {
-            const app = document.getElementById('mainAppBody');
-            if(mode === 'report') app.classList.add('mode-report');
-            else app.classList.add('mode-certs');
+            const body = document.getElementById('mainAppBody');
+            if(mode === 'report') body.classList.add('mode-report');
+            else body.classList.add('mode-certs');
             window.print();
-            app.classList.remove('mode-report', 'mode-certs');
+            body.classList.remove('mode-report', 'mode-certs');
         }
 
         window.onload = initCharts;
