@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة التميز الرقمي | زيد بن ثابت V59</title>
+    <title>منصة التميز الرقمي | زيد بن ثابت V60</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -15,64 +15,43 @@
         .sidebar-royal { background: linear-gradient(180deg, #064E3B 0%, #022c22 100%); }
         
         /* ---------------------------------------------------------
-           هندسة الطباعة V59 - الحل النهائي لتداخل الرسوم والجمالية
+           هندسة الطباعة V60 - الاحتواء والجمالية
         --------------------------------------------------------- */
         @media print {
             @page { size: A4 landscape !important; margin: 0 !important; }
             .no-print { display: none !important; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
-            /* تثبيت الصفحة لمنع الانقسام والصفحات الفارغة */
             .print-page { 
-                width: 297mm !important; 
-                height: 170mm !important; /* مساحة أمان 40 ملم لمنع الانقسام */
-                padding: 10mm !important; 
-                margin: 0 auto !important; 
-                display: flex !important; 
-                flex-direction: column !important;
-                box-sizing: border-box !important; 
-                position: relative; 
-                overflow: hidden !important;
-                page-break-after: always !important; 
-                transform: scale(0.93); /* تصغير مدروس لضمان الاحتواء */
+                width: 297mm !important; height: 170mm !important; 
+                padding: 10mm !important; margin: 0 auto !important; 
+                display: flex !important; flex-direction: column !important;
+                box-sizing: border-box !important; position: relative; overflow: hidden !important;
+                page-break-after: always !important; transform: scale(0.93);
             }
             .print-page:last-child { page-break-after: auto !important; }
             
-            /* الحل الجذري والنهائي لتداخل الرسوم في التقارير */
             .charts-grid-fixed { 
-                display: grid !important; 
-                grid-template-columns: repeat(3, 1fr) !important; /* تقسيم الصفحة لـ 3 أعمدة صلبة */
-                gap: 15px !important; 
-                height: 160px !important; /* ارتفاع ثابت يمنع التمدد أو التداخل */
-                width: 100% !important;
-                margin-top: 15px !important;
-            }
-            .chart-print-box { 
-                position: relative !important; 
-                height: 150px !important; 
-                width: 100% !important;
-                overflow: hidden !important;
+                display: grid !important; grid-template-columns: repeat(3, 1fr) !important; 
+                gap: 15px !important; height: 160px !important; width: 100% !important; margin-top: 15px !important;
             }
 
-            /* جمالية الشهادة الملكية المطورة */
             .cert-container { 
-                width: 100% !important; height: 100% !important; 
-                background: var(--bg-cert) !important;
-                border: 12px double var(--primary) !important; 
-                outline: 2px solid var(--accent) !important; 
-                outline-offset: -15px !important; 
-                padding: 30px !important; 
-                text-align: center !important; 
+                width: 100% !important; height: 100% !important; background: var(--bg-cert) !important;
+                border: 12px double var(--primary) !important; outline: 2px solid var(--accent) !important; 
+                outline-offset: -15px !important; padding: 30px !important; text-align: center !important; 
                 box-shadow: inset 0 0 80px rgba(212, 175, 55, 0.05) !important;
             }
 
             .mode-report .cert-item { display: none !important; }
             .mode-certs #dashboardReport { display: none !important; }
-            canvas, img { display: block !important; }
         }
 
         .glass-dashboard { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; }
         .custom-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 1rem; padding: 0.7rem; color: white; width: 100%; outline: none; }
+        .status-badge { font-size: 10px; padding: 4px 10px; border-radius: 20px; transition: 0.3s; }
+        .status-waiting { background: rgba(255,255,255,0.1); color: #ccc; }
+        .status-ready { background: #22c55e; color: white; }
     </style>
 </head>
 <body class="text-slate-800" id="mainBody">
@@ -81,19 +60,18 @@
         
         <aside class="no-print lg:w-96 sidebar-royal text-white p-8 shadow-2xl flex flex-col space-y-4 z-50">
             <div class="text-center pb-4 border-b border-white/10">
-                <h1 class="text-xl font-black text-amber-400">منصة التميز V59</h1>
-                <p class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest mt-1">إصدار التميز البصري</p>
+                <h1 class="text-xl font-black text-amber-400">منصة التميز V60</h1>
+                <p class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest mt-1">نسخة الربط المحكم</p>
             </div>
 
             <div class="space-y-2 overflow-y-auto pr-1">
                 <input type="text" id="schoolName" placeholder="اسم المدرسة..." class="custom-input font-bold text-xs" value="مدرسة زيد بن ثابت الثانوية">
-                <input type="text" id="subjectName" placeholder="اسم المادة (مثل: كيمياء)..." class="custom-input font-bold text-xs">
+                <input type="text" id="subjectName" placeholder="اسم المادة..." class="custom-input font-bold text-xs">
                 <input type="text" id="teacherName" placeholder="اسم المعلم..." class="custom-input font-bold text-xs" value="حسن آل هاشم">
-                <input type="text" id="principalName" placeholder="مدير المدرسة..." class="custom-input font-bold text-xs">
                 
-                <div class="mt-2 bg-white/5 p-3 rounded-2xl border border-white/10">
+                <div class="mt-2 bg-white/5 p-3 rounded-2xl border border-white/10 text-center">
                     <label class="block text-[10px] font-bold text-emerald-400 mb-2">🖼️ رفع الشعار الرسمي (PNG)</label>
-                    <input type="file" id="logoInput" accept="image/*" class="text-[8px] block w-full cursor-pointer file:bg-emerald-600 file:text-white file:border-none file:px-2 file:py-1 file:rounded-lg" onchange="loadLogo(event)">
+                    <input type="file" id="logoInput" accept="image/*" class="text-[8px] block w-full cursor-pointer" onchange="loadLogo(event)">
                 </div>
 
                 <div class="bg-black/30 p-4 rounded-2xl text-center">
@@ -102,10 +80,14 @@
                 </div>
 
                 <div class="pt-4 space-y-2">
-                    <button onclick="downloadExcelTemplate()" class="w-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold py-3 rounded-xl border border-white/20 transition flex items-center justify-center gap-2">📥 تحميل نموذج الإكسل</button>
+                    <button onclick="downloadExcelTemplate()" class="w-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold py-3 rounded-xl border border-white/20 transition">📥 تحميل نموذج الإكسل</button>
+                    
+                    <div id="fileInfo" class="status-badge status-waiting text-center">بانتظار ملف الدرجات...</div>
+                    
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
-                    <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition">📂 رفع ملف الدرجات</label>
-                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-black py-3 rounded-xl shadow-xl transition uppercase text-xs">✨ تحليل النتائج</button>
+                    <label for="excelInput" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl cursor-pointer block text-center shadow-lg transition active:scale-95">📂 اختيار ملف الدرجات</label>
+                    
+                    <button onclick="processAndAnalyze()" class="w-full bg-amber-500 hover:bg-amber-400 text-white font-black py-3 rounded-xl shadow-xl transition uppercase text-xs">✨ تحليل النتائج فوراً</button>
                     <hr class="border-white/10 my-2">
                     <button onclick="runPrint('report')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-xl transition text-xs">📊 طباعة التقرير (ثابت)</button>
                     <button onclick="runPrint('certs')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-xl shadow-xl transition text-xs">📜 طباعة الشهادات (فقط)</button>
@@ -132,26 +114,25 @@
                 </div>
 
                 <div class="grid grid-cols-4 gap-6 mb-6 text-center">
-                    <div class="bg-emerald-50/40 p-4 rounded-3xl border-r-4 border-emerald-900 shadow-sm"><p class="text-[10px] font-black uppercase mb-1">الطلاب</p><h3 id="totalStudents" class="text-3xl font-black text-slate-800">0</h3></div>
-                    <div class="bg-amber-50/40 p-4 rounded-3xl border-r-4 border-amber-500 shadow-sm"><p class="text-[10px] font-black uppercase mb-1">المتوسط</p><h3 id="avgScore" class="text-3xl font-black text-slate-800">0</h3></div>
-                    <div class="bg-blue-50/40 p-4 rounded-3xl border-r-4 border-blue-600 shadow-sm"><p class="text-[10px] font-black uppercase mb-1">النجاح</p><h3 id="passRate" class="text-3xl font-black text-slate-800">0%</h3></div>
-                    <div class="bg-rose-50/40 p-4 rounded-3xl border-r-4 border-rose-600 shadow-sm"><p class="text-[10px] font-black uppercase mb-1">الأعلى</p><h3 id="maxScore" class="text-3xl font-black text-slate-800">0</h3></div>
+                    <div class="bg-emerald-50/40 p-4 rounded-3xl border-r-4 border-emerald-900 shadow-sm"><p class="text-[10px] font-black mb-1">الطلاب</p><h3 id="totalStudents" class="text-3xl font-black text-slate-800">0</h3></div>
+                    <div class="bg-amber-50/40 p-4 rounded-3xl border-r-4 border-amber-500 shadow-sm"><p class="text-[10px] font-black mb-1">المتوسط</p><h3 id="avgScore" class="text-3xl font-black text-slate-800">0</h3></div>
+                    <div class="bg-blue-50/40 p-4 rounded-3xl border-r-4 border-blue-600 shadow-sm"><p class="text-[10px] font-black mb-1">النجاح</p><h3 id="passRate" class="text-3xl font-black text-slate-800">0%</h3></div>
+                    <div class="bg-rose-50/40 p-4 rounded-3xl border-r-4 border-rose-600 shadow-sm"><p class="text-[10px] font-black mb-1">الأعلى</p><h3 id="maxScore" class="text-3xl font-black text-slate-800">0</h3></div>
                 </div>
 
                 <div class="charts-grid-fixed flex-1">
-                    <div class="chart-print-box glass-dashboard p-3"><canvas id="gradeChart"></canvas></div>
-                    <div class="chart-print-box glass-dashboard p-3"><canvas id="pieChart"></canvas></div>
-                    <div class="chart-print-box glass-dashboard p-3"><canvas id="qualityChart"></canvas></div>
+                    <div class="glass-dashboard p-3"><canvas id="gradeChart"></canvas></div>
+                    <div class="glass-dashboard p-3"><canvas id="pieChart"></canvas></div>
+                    <div class="glass-dashboard p-3"><canvas id="qualityChart"></canvas></div>
                 </div>
             </div>
-
             <div id="certificatesArea" class="space-y-12"></div>
         </main>
     </div>
 
     <script>
-        let workbook, gradeChart, pieChart, qualityChart;
-        let studentsList = [];
+        let workbook = null;
+        let gradeChart, pieChart, qualityChart;
         let logoBase64 = "";
 
         function initCharts() {
@@ -163,11 +144,7 @@
 
         function loadLogo(event) {
             const reader = new FileReader();
-            reader.onload = (e) => { 
-                logoBase64 = e.target.result; 
-                document.getElementById('mainLogo').src = logoBase64; 
-                document.getElementById('mainLogo').classList.remove('hidden'); 
-            };
+            reader.onload = (e) => { logoBase64 = e.target.result; document.getElementById('mainLogo').src = logoBase64; document.getElementById('mainLogo').classList.remove('hidden'); };
             reader.readAsDataURL(event.target.files[0]);
         }
 
@@ -176,26 +153,39 @@
             const ws = XLSX.utils.aoa_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "الدرجات");
-            XLSX.writeFile(wb, "نموذج_رصد_زيد_بن_ثابت_V59.xlsx");
+            XLSX.writeFile(wb, "نموذج_رصد_زيد_بن_ثابت_V60.xlsx");
         }
 
-        document.getElementById('excelInput').addEventListener('change', (e) => {
+        // تحسين وحدة رفع الملف
+        document.getElementById('excelInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
             const reader = new FileReader();
-            reader.onload = (evt) => {
+            reader.onload = function(evt) {
                 try {
-                    workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                    alert("✅ تم ربط ملف البيانات!");
-                } catch(err) { alert("❌ خطأ في قراءة الملف."); }
+                    const data = evt.target.result;
+                    workbook = XLSX.read(data, { type: 'binary' });
+                    const status = document.getElementById('fileInfo');
+                    status.innerText = "✅ تم استلام الملف: " + file.name;
+                    status.className = "status-badge status-ready text-center";
+                    console.log("Workbook loaded successfully");
+                } catch (err) {
+                    alert("❌ فشل في قراءة ملف الإكسل. تأكد أنه ملف صحيح.");
+                    console.error(err);
+                }
             };
-            reader.readAsBinaryString(e.target.files[0]);
+            reader.onerror = function() { alert("❌ خطأ أثناء رفع الملف."); };
+            reader.readAsBinaryString(file);
         });
 
         function processAndAnalyze() {
-            if (!workbook) return alert("الرجاء رفع ملف الدرجات أولاً");
+            if (!workbook) return alert("الرجاء اختيار ملف الدرجات أولاً عبر الزر الأخضر.");
             const maxG = parseFloat(document.getElementById('maxGrade').value) || 40;
-            const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-            studentsList = []; let counts = [0, 0, 0, 0, 0]; let successCount = 0;
+            let studentsList = []; let counts = [0, 0, 0, 0, 0]; let successCount = 0;
             let scoreIdx = rows[0].findIndex(c => c && (c.toString().includes("مجموع") || c.toString().includes("درجة")));
             if (scoreIdx === -1) scoreIdx = rows[0].length - 1;
 
@@ -215,19 +205,22 @@
                 }
             });
 
-            updateStatsAndUI(counts, studentsList.length, successCount, maxG);
+            if (studentsList.length === 0) return alert("لم يتم العثور على بيانات صالحة داخل الملف.");
+
+            updateStats(studentsList, counts, successCount, maxG);
             generateCerts(studentsList.filter(st => st.grade === "ممتاز"), maxG);
+            alert("✅ تم تحليل " + studentsList.length + " طالباً بنجاح!");
         }
 
-        function updateStatsAndUI(counts, total, success, maxG) {
-            document.getElementById('totalStudents').innerText = total;
-            document.getElementById('avgScore').innerText = (studentsList.reduce((a, b) => a + b.score, 0) / total).toFixed(1);
-            document.getElementById('passRate').innerText = ((success/total)*100).toFixed(0) + "%";
-            document.getElementById('maxScore').innerText = Math.max(...studentsList.map(st => st.score));
+        function updateStats(list, counts, success, maxG) {
+            document.getElementById('totalStudents').innerText = list.length;
+            document.getElementById('avgScore').innerText = (list.reduce((a, b) => a + b.score, 0) / list.length).toFixed(1);
+            document.getElementById('passRate').innerText = ((success/list.length)*100).toFixed(0) + "%";
+            document.getElementById('maxScore').innerText = Math.max(...list.map(st => st.score));
 
             gradeChart.data.labels = ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'];
             gradeChart.data.datasets[0].data = counts; gradeChart.update();
-            pieChart.data.datasets[0].data = [success, total - success]; pieChart.update();
+            pieChart.data.datasets[0].data = [success, list.length - success]; pieChart.update();
             qualityChart.data.labels = ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'لم يجتز'].reverse();
             qualityChart.data.datasets[0].data = counts.slice().reverse(); qualityChart.update();
 
@@ -242,7 +235,6 @@
             const school = document.getElementById('schoolName').value;
             const subject = document.getElementById('subjectName').value;
             const teacher = document.getElementById('teacherName').value;
-            const principal = document.getElementById('principalName').value || "...";
 
             excellent.forEach(st => {
                 area.innerHTML += `
@@ -250,35 +242,32 @@
                         <div class="cert-container">
                             <div class="absolute top-8 left-8 opacity-10 text-9xl">🎖️</div>
                             ${logoBase64 ? `<img src="${logoBase64}" class="h-20 mx-auto mb-4">` : '<div class="h-20 mb-4"></div>'}
-                            
                             <h1 style="font-family: 'Reem Kufi', sans-serif;" class="text-4xl font-bold text-emerald-900 mb-2">شهادة شكر وتقدير</h1>
-                            
-                            <p style="font-family: 'Amiri', serif;" class="text-2xl mb-4 font-bold text-slate-500 italic">
-                                تتقدم إدارة <span class="text-emerald-800 underline decoration-amber-500 underline-offset-4">${school}</span>
-                            </p>
-                            
+                            <p style="font-family: 'Amiri', serif;" class="text-2xl mb-4 font-bold text-slate-500 italic">تتقدم إدارة <span class="text-emerald-800 underline decoration-amber-500 underline-offset-4">${school}</span></p>
                             <p class="text-lg mb-2 font-bold text-slate-700">بفيض من الفخر والاعتزاز بتهنئة الطالب المتميز:</p>
-                            
-                            <h2 style="font-family: 'Reem Kufi', sans-serif;" class="text-5xl font-black text-amber-600 mb-6 border-b-4 border-amber-100 px-8 pb-2 inline-block">
-                                ${st.name}
-                            </h2>
-                            
+                            <h2 style="font-family: 'Reem Kufi', sans-serif;" class="text-5xl font-black text-amber-600 mb-6 border-b-4 border-amber-100 px-8 pb-2 inline-block">${st.name}</h2>
                             <p style="font-family: 'Amiri', serif;" class="text-xl leading-relaxed max-w-4xl mx-auto mb-8 font-bold italic text-slate-700">
-                                لنيله درجة التميز الكاملة <strong>(${st.score})</strong> من <strong>(${maxG})</strong> بتقدير <strong>(${st.grade})</strong> في مادة <strong>(${subject})</strong>، سائلين المولى له دوام التوفيق والنجاح.
+                                لنيله درجة التميز الكاملة <strong>(${st.score})</strong> من <strong>(${maxG})</strong> بتقدير <strong>(${st.grade})</strong> في مادة <strong>(${subject})</strong>.
                             </p>
-                            
                             <div class="flex justify-between w-full px-24 mt-4 font-black text-lg italic text-emerald-900">
-                                <div class="text-center">معلم المادة<br><span style="font-family: 'Cairo', sans-serif;" class="text-slate-400 text-sm font-bold">${teacher}</span></div>
-                                <div class="text-center opacity-20 text-[9px]"><br>ختم المدرسة</div>
-                                <div class="text-center">مدير المدرسة<br><span style="font-family: 'Cairo', sans-serif;" class="text-slate-400 text-sm font-bold">${principal}</span></div>
+                                <div class="text-center">معلم المادة<br><span class="text-slate-400 text-sm font-bold">${teacher}</span></div>
+                                <div class="text-center">مدير المدرسة<br><span class="text-slate-400 text-sm font-bold">..................</span></div>
                             </div>
                         </div>
                     </div>
                 `;
             });
-            alert(`✅ تم تحليل النتائج وإصدار ${excellent.length} شهادة بنظام التميز البصري!`);
         }
 
         function runPrint(mode) {
             const body = document.getElementById('mainBody');
-            if(mode === '
+            if(mode === 'report') body.classList.add('mode-report');
+            else body.classList.add('mode-certs');
+            window.print();
+            body.classList.remove('mode-report', 'mode-certs');
+        }
+
+        window.onload = initCharts;
+    </script>
+</body>
+</html>
